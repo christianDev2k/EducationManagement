@@ -1,0 +1,121 @@
+.form_qty {
+    background-color: $color-grey-light;
+    width: 90px;
+    height: 30px;
+    border-radius: $radius-1 - 4;
+    border: 1px solid $bd-color-base;
+    .qty-down,
+    .qty-up {
+        background-color: transparent;
+        border: none;
+        width: 25px;
+        height: 25px;
+        font-size: $fs-1 - 2;
+    }
+    .qty-value {
+        width: 40px;
+        height: 25px;
+        text-align: center;
+        outline: none;
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    }
+}
+
+.size-selected {
+    @include Text($fs-1, $fw-1, $base-color);
+    .size {
+        color: $color-header;
+        font-weight: $fw-2;
+    }
+}
+
+.size-option-group {
+    input {
+        display: none;
+        &:checked ~ .label-size {
+            background-color: $color-black;
+            color: $color-white;
+        }
+    }
+    .label-size {
+        background-color: $color-white;
+        border: 1px solid $bd-color-base;
+        border-radius: $radius-2 - 2;
+        color: $base-color;
+        padding: $pd-1 - 4 $pd-2 - 1;
+        transition: $transition;
+        line-height: 1.2;
+        margin-bottom: $m-1 - 5;
+        margin-right: $m-1 - 5;
+        cursor: pointer;
+        &:hover {
+            background-color: $color-black;
+            color: $color-white;
+        }
+    }
+}
+
+.checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    background-color: $bg-color-base;
+    border: 1px solid $color-grey;
+    margin-right: 8px;
+    text-align: center;
+    &::before {
+        content: '\f00c';
+        display: none;
+        width: 100%;
+        font-weight: 900;
+        font-family: 'Font Awesome 6 Free';
+        font-size: $pd-3 - 3;
+        color: $color-white;
+        line-height: 16px;
+    }
+
+    &:checked {
+        background-color: $color-link;
+        border-color: $color-link;
+    }
+
+    &:checked::before {
+        display: block;
+    }
+}
+
+.scroll-y {
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar {
+        width: 8px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: rgba($color: #000000, $alpha: 0.1);
+        border-radius: $radius-1;
+        &:hover {
+            background-color: rgba($color: #000000, $alpha: 0.3);
+        }
+    }
+}
+
+.price-group {
+    .price-product {
+        padding: $pd-2 0;
+        line-height: 1.2;
+        @include Text($fs-h4 + 6, $fw-2, $color-header);
+        &.sale {
+            color: $primary-color;
+        }
+    }
+    .price-product-discount {
+        text-decoration: line-through;
+        @include Text($fs-3, $fw-1, $color-footer-link);
+        display: none;
+    }
+}

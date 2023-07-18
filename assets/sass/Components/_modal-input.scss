@@ -1,0 +1,45 @@
+#add-user {
+    .modal {
+        &-body {
+            padding-bottom: $pd-4 - 1;
+        }
+    }
+    .form-group.invalid {
+        .form-message {
+            color: $color-danger;
+        }
+    }
+    .form-label {
+        margin-bottom: $m-1 - 4;
+        line-height: 1.2;
+    }
+    .form-control {
+        box-shadow: none;
+        border: 1px solid rgba($color: $bg-primary-hover, $alpha: 0.3);
+        transition: $transition;
+        &:focus {
+            border-color: $bg-primary-hover;
+        }
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    }
+    .form-control[disabled] {
+        background-color: $bg-color-base;
+    }
+
+    .nav-tabs {
+        border-bottom: none;
+        .nav-link {
+            border: 2px solid $dash-primary-color;
+            border-radius: $radius-0;
+            width: 115px;
+            height: 115px;
+            &.active {
+                background-color: rgba($color: $dash-primary-color, $alpha: 0.1);
+            }
+        }
+    }
+}

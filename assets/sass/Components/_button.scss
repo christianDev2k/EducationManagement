@@ -1,0 +1,39 @@
+.btn {
+    @include Text($fs-1, $fw-2, $color-white);
+    border-radius: $radius-0;
+    padding: $pd-1 + 1 $pd-5;
+    border: 1px solid transparent;
+    transition: $transition;
+    height: 50px;
+}
+
+.btn {
+    height: auto;
+    padding: $pd-3 $pd-4;
+    border-radius: 5px;
+    line-height: 1;
+
+    &.btn-primary-db {
+        background-color: $dash-primary-color;
+        @include Text($fs-1, $fw-3, $color-white);
+        &:hover {
+            background-color: $bg-primary-hover;
+            @include Text($fs-1, $fw-3, $color-white);
+        }
+    }
+    &.btn-secondary-db {
+        background-color: $color-grey;
+        @include Text($fs-1, $fw-3, $color-white);
+        &:hover {
+            background-color: $color-lighten;
+            @include Text($fs-1, $fw-3, $color-white);
+        }
+    }
+
+    &.btn--buy-now, &.btn--buy-now:hover {
+        background-color: $buy-now-btn-color;
+        border-radius: $radius-0;
+        text-transform: uppercase;
+        color: $color-white;
+    }
+}
