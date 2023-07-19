@@ -3,8 +3,7 @@
  * - Từ element form lấy ra các input có attribute name và rules.
  * - Tạo ra object Form rules và lặp qua các input truyền vào key: value (name: rules)
  */
-
-export default function Validator(formSelector) {
+function Validator(formSelector) {
     // ================== ĐỊNH NGHĨA VALIDATE METHOD =========================
 
     // Hàm thực thi validate
@@ -60,7 +59,7 @@ export default function Validator(formSelector) {
         },
         email(value) {
             const regex = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-            return regex.test(value) ? undefined : 'Trường này phải là email!';
+            return regex.test(value) ? undefined : 'This field must have a ID!';
         },
         min(min) {
             return function (value) {
@@ -79,13 +78,14 @@ export default function Validator(formSelector) {
 
     // DOM element form
     const formElement = document.querySelector(formSelector);
+
     // ================== PHÂN TÍCH DOM => OBJECT ==> EVENT VALIDATE =========================
 
     // Chuyển mô tả từ DOM sang dạng OBJECT để dễ xử lí hơn
     const formRules = {};
     if (formElement) {
         // Lấy ra tất cả input trong form có attribute rule và name.
-        const inputs = formElement.querySelectorAll('[name][rules]');
+        const inputs = formElement.querySelectorAll('[name][rules]:not([disabled])');
         // Lặp qua các input
         for (let input of inputs) {
             const rules = input.getAttribute('rules').split('|');
@@ -131,16 +131,15 @@ export default function Validator(formSelector) {
         e.preventDefault();
 
         // Lặp qua các input
-        const inputs = formElement.querySelectorAll('[name][rules]');
+        const inputs = formElement.querySelectorAll('[name][rules]:not([disabled])');
         let isValid = true;
-        for (let input of inputs) {
-            !handleValidate({ target: input }) ? (isValid = false) : null;
-        }
+        // for (let input of inputs) {
+        //     !handleValidate({ target: input }) ? (isValid = false) : null;
+        // }
 
         if (isValid) {
             if (typeof this.onSubmit === 'function') {
-                const enableInputs = formElement.querySelectorAll('[name]');
-
+                const enableInputs = formElement.querySelectorAll('[name]:not([disabled])');
                 const formValues = Array.from(enableInputs).reduce((values, input) => {
                     switch (input.type) {
                         case 'radio':
@@ -174,3 +173,5 @@ export default function Validator(formSelector) {
         }
     };
 }
+
+export default Validator;

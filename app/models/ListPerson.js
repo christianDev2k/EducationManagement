@@ -1,11 +1,14 @@
 class ListPerson {
     constructor() {
-        this.studentList = [];
-        this.employeeList = [];
-        this.customersList = [];
+        this.list = [];
     }
-    AddPersonMethod(userList, user) {
-        userList.push(user);
+
+    AddUserMethod(newUser) {
+        this.list.push(newUser);
+    }
+
+    DeleteUserMethod(id) {
+        this.list = this.list.filter(u => u.id !== id);
     }
 }
 
