@@ -9,7 +9,8 @@ class Student extends Person {
     }
 
     calcPoints() {
-        return (Number(this.math) + Number(this.physical) + Number(this.chemistry) / 3).toLocaleString('vi-VN');
+        debugger
+        return ((Number(this.math) + Number(this.physical) + Number(this.chemistry)) / 3).toLocaleString('vi-VN');
     }
 }
 

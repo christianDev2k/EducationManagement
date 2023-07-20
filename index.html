@@ -579,69 +579,33 @@
                                 <li class="nav-item profile">
                                     <a class="nav-link d-flex align-items-center" href="#">
                                         <img src="../../assets/img/Dashboard/avt.jpg" alt="" class="img-fluid" />
-                                        <p class="profile-name mb-0 ms-2">
-                                            Wibu
+                                        <div class="profile-name ms-2">
+                                            <span id="account-name">Customer</span>
                                             <i class="profile-name-icon fa-solid fa-angle-down"></i>
-                                        </p>
+                                        </div>
                                     </a>
                                     <div class="dropdown">
-                                        <div class="drop-header d-flex align-items-center justify-content-start">
+                                        <button name="account-options" data-account="cus" class="drop-header w-100 border-0 d-flex align-items-center justify-content-start">
                                             <img src="../../assets/img/Dashboard/avt.jpg" alt="" class="img-fluid" />
                                             <div class="profile-name p-0">
-                                                <h6 class="mb-0 name">Wibu Tập Code</h6>
-                                                <p class="mb-0 job-name">Mém Intern FE</p>
+                                                <h6 class="mb-0 name">Customer</h6>
+                                                <p class="mb-0 job-name"></p>
                                             </div>
-                                        </div>
-                                        <ul class="drop-body h-auto list-unstyled">
-                                            <li class="profile-item">
-                                                <a href="#" class="d-flex align-items-center text-decoration-none">
-                                                    <div class="profile-icon">
-                                                        <i class="fa-regular fa-user"></i>
-                                                    </div>
-                                                    <p class="profile-title mb-0">Profile</p>
-                                                </a>
-                                            </li>
-                                            <li class="profile-item">
-                                                <a href="#" class="d-flex align-items-center text-decoration-none">
-                                                    <div class="profile-icon">
-                                                        <i class="fa-solid fa-gear"></i>
-                                                    </div>
-                                                    <p class="profile-title mb-0">Setting</p>
-                                                </a>
-                                            </li>
-                                            <li class="profile-item">
-                                                <a href="#" class="d-flex align-items-center text-decoration-none">
-                                                    <div class="profile-icon">
-                                                        <i class="fa-solid fa-key"></i>
-                                                    </div>
-                                                    <p class="profile-title mb-0">Billing</p>
-                                                </a>
-                                            </li>
-                                            <li class="profile-item">
-                                                <a href="#" class="d-flex align-items-center text-decoration-none">
-                                                    <div class="profile-icon">
-                                                        <i class="fa-solid fa-users"></i>
-                                                    </div>
-                                                    <p class="profile-title mb-0">Activity</p>
-                                                </a>
-                                            </li>
-                                            <li class="profile-item">
-                                                <a href="#" class="d-flex align-items-center text-decoration-none">
-                                                    <div class="profile-icon">
-                                                        <i class="fa-regular fa-bell"></i>
-                                                    </div>
-                                                    <p class="profile-title mb-0">Help</p>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                        <div class="drop-footer">
-                                            <a href="#" class="d-flex justify-content-center text-decoration-none">
-                                                <div class="profile-icon">
-                                                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                                                </div>
-                                                <p class="mb-0">Sign out</p>
-                                            </a>
-                                        </div>
+                                        </button>
+                                        <button name="account-options" data-account="stu" class="drop-header w-100 border-0 d-flex align-items-center justify-content-start">
+                                            <img src="../../assets/img/Dashboard/avt.jpg" alt="" class="img-fluid" />
+                                            <div class="profile-name p-0">
+                                                <h6 class="mb-0 name">Student</h6>
+                                                <p class="mb-0 job-name"></p>
+                                            </div>
+                                        </button>
+                                        <button name="account-options" data-account="emp" class="drop-header w-100 border-0 d-flex align-items-center justify-content-start">
+                                            <img src="../../assets/img/Dashboard/avt.jpg" alt="" class="img-fluid" />
+                                            <div class="profile-name p-0">
+                                                <h6 class="mb-0 name">Employee</h6>
+                                                <p class="mb-0 job-name"></p>
+                                            </div>
+                                        </button>
                                     </div>
                                 </li>
                             </ul>
@@ -865,15 +829,15 @@
                             <div class="table-header d-flex align-items-center justify-content-between">
                                 <h3 class="mb-0">Product List</h3>
                                 <div class="d-flex">
-                                    <p class="mb-0">Sort by price</p>
+                                    <p class="mb-0">Sort by name</p>
                                     <div class="ms-2 sort-price">
-                                        <input type="radio" name="sort-price" class="d-none" id="price-ascending" value="ascending" />
-                                        <label for="price-ascending" class="sort-label">
-                                            <i class="fa-solid fa-arrow-up-1-9"></i>
+                                        <input type="radio" name="sort-name" class="d-none" id="price-az" value="ascending" />
+                                        <label for="price-az" class="sort-label">
+                                            <i class="fa-solid fa-arrow-down-a-z"></i>
                                         </label>
-                                        <input type="radio" name="sort-price" class="d-none" id="price-descending" value="descending" />
-                                        <label for="price-descending" class="sort-label">
-                                            <i class="fa-solid fa-arrow-down-9-1"></i>
+                                        <input type="radio" name="sort-name" class="d-none" id="price-za" value="descending" />
+                                        <label for="price-za" class="sort-label">
+                                            <i class="fa-solid fa-arrow-up-z-a"></i>
                                         </label>
                                     </div>
                                     <button id="clearFilter" class="ms-2 bg-transparent border-0">
@@ -932,7 +896,7 @@
                 <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
                     <div class="modal-content px-3">
                         <div class="modal-header py-4 justify-content-center">
-                            <h4 class="mb-0">Add User</h4>
+                            <h4 id="modal-heading" class="mb-0">Add User</h4>
                         </div>
                         <div class="modal-body">
                             <form action="" id="add-user">
@@ -960,77 +924,27 @@
                                         <small class="form-message"></small>
                                     </div>
                                 </div>
-
-                                <div class="mt-3">
-                                    <div class="nav nav-tabs justify-content-center" role="tablist">
-                                        <button class="nav-link active" data-user="student" data-bs-toggle="tab" data-bs-target="#nav-student" title="Student" type="button" role="tab" aria-controls="nav-student" aria-selected="true">
-                                            <img width="65" height="65" src="https://img.icons8.com/pastel-glyph/60/student-male--v2.png" alt="student-male--v2" />
-                                        </button>
-                                        <button class="nav-link mx-5" data-user="employee" data-bs-toggle="tab" data-bs-target="#nav-employee" title="Employee" type="button" role="tab" aria-controls="nav-employee" aria-selected="false">
-                                            <img src="./assets/img/Icon/icons8-manager-80.png" alt="Student" />
-                                        </button>
-                                        <button class="nav-link" data-user="customer" data-bs-toggle="tab" data-bs-target="#nav-customer" title="Customer" type="button" role="tab" aria-controls="nav-customer" aria-selected="false">
-                                            <img src="./assets/img/Icon/icons8-customer-80.png" alt="" />
-                                        </button>
-                                    </div>
-                                    <div class="tab-content mt-3">
-                                        <div class="tab-pane fade show active" id="nav-student" role="tabpanel" aria-labelledby="nav-student" tabindex="0">
-                                            <div class="row">
-                                                <div class="col-4 form-group mb-2">
-                                                    <label for="math" class="form-label">Math</label>
-                                                    <input type="number" disabled name="math" id="math" class="form-control" rules="required" aria-describedby="helpId" />
-                                                    <small class="form-message"></small>
-                                                </div>
-                                                <div class="col-4 form-group mb-2">
-                                                    <label for="physical" class="form-label">Physical</label>
-                                                    <input type="number" disabled name="physical" id="physical" class="form-control" rules="required" aria-describedby="helpId" />
-                                                    <small class="form-message"></small>
-                                                </div>
-                                                <div class="col-4 form-group mb-2">
-                                                    <label for="chemistry" class="form-label">Chemistry</label>
-                                                    <input type="number" disabled name="chemistry" id="chemistry" class="form-control" rules="required" aria-describedby="helpId" />
-                                                    <small class="form-message"></small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane fade" id="nav-employee" role="tabpanel" aria-labelledby="nav-employee" tabindex="0">
-                                            <div class="row">
-                                                <div class="col-6 form-group mb-2">
-                                                    <label for="daysWorked" class="form-label">Days of worked</label>
-                                                    <input type="number" disabled name="daysWorked" id="daysWorked" class="form-control" rules="required" aria-describedby="helpId" />
-                                                    <small class="form-message"></small>
-                                                </div>
-                                                <div class="col-6 form-group mb-2">
-                                                    <label for="salary" class="form-label">Daily Salary</label>
-                                                    <input type="number" disabled name="salary" id="salary" class="form-control" rules="required" aria-describedby="helpId" />
-                                                    <small class="form-message"></small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane fade" id="nav-customer" role="tabpanel" aria-labelledby="nav-customer" tabindex="0">
-                                            <div class="row">
-                                                <div class="col-4 form-group mb-2">
-                                                    <label for="companyName" class="form-label">Company Name</label>
-                                                    <input type="text" disabled name="companyName" id="companyName" class="form-control" rules="required" aria-describedby="helpId" />
-                                                    <small class="form-message"></small>
-                                                </div>
-                                                <div class="col-4 form-group mb-2">
-                                                    <label for="invoice" class="form-label">Invoice Value</label>
-                                                    <input type="text" disabled name="invoice" id="invoice" class="form-control" rules="required" aria-describedby="helpId" />
-                                                    <small class="form-message"></small>
-                                                </div>
-                                                <div class="col-4 form-group mb-2">
-                                                    <label for="rating" class="form-label">Rating</label>
-                                                    <input type="text" disabled name="rating" id="rating" class="form-control" rules="required" aria-describedby="helpId" />
-                                                    <small class="form-message"></small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="nav nav-tabs justify-content-center mt-3" role="tablist">
+                                    <button class="nav-link active" data-user="student" data-bs-toggle="tab" data-bs-target="#nav-student" title="Student" type="button" role="tab" aria-controls="nav-student" aria-selected="true">
+                                        <img width="65" height="65" src="https://img.icons8.com/pastel-glyph/60/student-male--v2.png" alt="student-male--v2" />
+                                    </button>
+                                    <button class="nav-link mx-5" data-user="employee" data-bs-toggle="tab" data-bs-target="#nav-employee" title="Employee" type="button" role="tab" aria-controls="nav-employee" aria-selected="false">
+                                        <img src="./assets/img/Icon/icons8-manager-80.png" alt="Student" />
+                                    </button>
+                                    <button class="nav-link" data-user="customer" data-bs-toggle="tab" data-bs-target="#nav-customer" title="Customer" type="button" role="tab" aria-controls="nav-customer" aria-selected="false">
+                                        <img src="./assets/img/Icon/icons8-customer-80.png" alt="" />
+                                    </button>
                                 </div>
-                                <div class="text-end mt-3">
-                                    <button type="button" id="closeAddPerson" class="btn btn-secondary-db" data-bs-dismiss="modal">Close</button>
-                                    <button id="getFormBtn" class="btn btn-primary-db"></button>
+                                <div class="mt-3" id="input-options"></div>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <div id="feature" class="active">
+                                        <span class="title"></span>
+                                        <span class="result"></span>
+                                    </div>
+                                    <div>
+                                        <button type="button" id="closeAddPerson" class="btn btn-secondary-db" data-bs-dismiss="modal">Close</button>
+                                        <button id="getFormBtn" class="btn btn-primary-db"></button>
+                                    </div>
                                 </div>
                             </form>
                         </div>

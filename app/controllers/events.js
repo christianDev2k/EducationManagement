@@ -1,12 +1,30 @@
 import Validator from '../../app/util/validations.js';
-import { HandleAddPerson, AnableInput, HandleDeleteUser } from '../controllers/functions.js';
+import Student from '../models/Student.js';
+import Employee from '../models/Employee.js';
+import Customer from '../models/Customer.js';
+import {
+    FeatureAccount,
+    SearchByName,
+    SortAscending,
+    SortDescending,
+    ActiveButton,
+    GetUserByID,
+    renderInputOptions,
+    ShowInfoMode,
+    HandleDeleteUser,
+    ShowUserInfo,
+    SetDefaultForm,
+    HandleAddPerson,
+    HandleEditPerson,
+    RenderUserList,
+} from '../controllers/functions.js';
 
 const event = () => {
     const $ = document.querySelector.bind(document);
     const $$ = document.querySelectorAll.bind(document);
 
-    // Validate
-    Validator('#add-user');
+    let editID = -1;
+    let curAcc = 'cus';
 
     // UI: Hide and display sidebar
     $('.navbar__toogle-sidebar').onclick = () => {
@@ -16,44 +34,102 @@ const event = () => {
     // UI: Display name button when add person
     const addNewButton = $('#addNewBtn');
     addNewButton.onclick = () => {
-        let id = 0;
-        do {
-            id = new Date().getTime().toString() % 1000000;
-        } while (id < 100000 && id > 999999);
-
-        $('#id').value = id;
-        getFormBtn.innerHTML = 'Add Now!';
+        $('#feature').classList.remove('active');
+        SetDefaultForm();
+        ShowInfoMode(false);
     };
 
-    // UI: Anabled input field
-    let typeUser = AnableInput();
-    const navTabBtn = $$('.nav-tabs .nav-link');
-    navTabBtn.forEach(b => {
-        b.onclick = e => {
-            typeUser = AnableInput(e);
+    // UI: Change account
+    const accounts = document.getElementsByName('account-options');
+    accounts.forEach(acc => {
+        acc.onclick = () => {
+            curAcc = acc.dataset.account;
+            const avatarText = curAcc ? (curAcc === 'stu' ? 'Student' : curAcc === 'emp' ? 'Employee' : 'Customer') : null;
+            $('#account-name').innerHTML = avatarText;
         };
     });
 
-    // OOP: Add person
-    const getFormBtn = $('#getFormBtn');
-    getFormBtn.onclick = () => {
-        HandleAddPerson(typeUser);
+    // UI: Clear filters
+    $('#clearFilter').onclick = () => {
+        RenderUserList();
     };
+
+    // OOP: Validate
+    $$('.nav-tabs .nav-link').forEach((b, index) => {
+        b.onclick = () => {
+            renderInputOptions(index);
+            handleValidate(index);
+        };
+    });
+
+    // OOP: Render input options
+    renderInputOptions(0);
+    handleValidate(0);
 
     // OOP: Remove / Edit person
     $('#userData').onclick = e => {
-        if (e.target.parentElement.getAttribute('data-del')) {
-            HandleDeleteUser(e.target.parentElement.dataset.del);
-        }
+        const button = e.target.parentElement;
+        if (button.getAttribute('data-del')) {
+            HandleDeleteUser(button.dataset.del);
+        } else if (button.getAttribute('data-view')) {
+            const id = button.dataset.view;
 
-        if (e.target.parentElement.getAttribute('data-edit')) {
-            addNewButton.click();
+            ShowInfoMode(true);
+            ShowUserInfo(id);
+            FeatureAccount(curAcc, id);
+        } else if (button.getAttribute('data-edit')) {
+            ShowInfoMode(false);
+            editID = button.dataset.edit;
+            ShowUserInfo(editID);
+
+            getFormBtn.style.display = 'inline-block';
+            $('#modal-heading').innerHTML = 'Edit Mode';
             $('#getFormBtn').innerHTML = 'Edit Now!';
 
-            // editID = e.target.parentElement.dataset.edit;
-            // f.getEditProduct(editID);
+            const user = GetUserByID(editID);
+            const { userType } = user;
+            const index = userType === 'Student' ? 0 : userType === 'Employee' ? 1 : 2;
+            ActiveButton(index);
+            handleValidate(index);
         }
     };
+
+    // OOP: Sort
+    const sortInputs = document.getElementsByName('sort-name');
+    sortInputs.forEach(i => {
+        i.onchange = () => {
+            i.checked ? (i.id === 'price-az' ? SortAscending() : SortDescending()) : null;
+        };
+    });
+
+    // OOP: Search
+    $('#search-btn').onclick = () => {
+        SearchByName();
+    };
+
+    // =================================================================
+
+    function handleValidate(index) {
+        const validator = new Validator('#add-user');
+        validator.onSubmit = function (data) {
+            const { id, name, address, email, math, physical, chemistry, daysWorked, salary, companyName, invoice, rating } = data;
+            let newUser = {};
+
+            switch (index) {
+                case 0:
+                    newUser = new Student(id, name, address, email, 'Student', math, physical, chemistry);
+                    break;
+                case 1:
+                    newUser = new Employee(id, name, address, email, 'Employee', daysWorked, salary);
+                    break;
+                case 2:
+                    newUser = new Customer(id, name, address, email, 'Customer', companyName, invoice, rating);
+                    break;
+            }
+
+            editID === -1 ? HandleAddPerson(newUser) : HandleEditPerson(newUser, editID);
+        };
+    }
 };
 
 export default event;

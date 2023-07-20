@@ -1,4 +1,3 @@
-import Validator from '../../app/util/validations.js';
 import Student from '../models/Student.js';
 import Employee from '../models/Employee.js';
 import Customer from '../models/Customer.js';
@@ -20,37 +19,95 @@ function SetLocalStorages(value) {
 export function GetLocalStorages() {
     const data = localStorage.getItem(KEY_STORAGE) ? JSON.parse(localStorage.getItem(KEY_STORAGE)) : [];
     listPerson.list = data.map(p => {
+        const { id, name, email, address, math, physical, chemistry, days, salary, nameCompany, billValue, rating } = p;
         switch (p.userType) {
             case 'Student':
-                return new Student(p.id, p.name, p.address, p.email, 'Student', p.math, p.physical, p.chemistry);
+                return new Student(id, name, address, email, 'Student', math, physical, chemistry);
             case 'Employee':
-                return new Employee(p.id, p.name, p.address, p.email, 'Employee', p.daysWorked, p.salary);
+                return new Employee(id, name, address, email, 'Employee', days, salary);
             case 'Customer':
-                return new Customer(p.id, p.name, p.address, p.email, 'Customer', p.companyName, p.invoice, p.rating);
+                return new Customer(id, name, address, email, 'Customer', nameCompany, billValue, rating);
         }
     });
-
     RenderUserList(listPerson.list);
 }
 
-// UI: Check and anable input field
-export function AnableInput(e) {
-    const tabPane = $$('.tab-pane');
-    tabPane.forEach(t => {
-        if (t.classList.contains('active')) {
-            const inputs = t.querySelectorAll('.form-control');
-            inputs.forEach(i => {
-                i.disabled = false;
-            });
-        } else {
-            const inputs = t.querySelectorAll('.form-control');
-            inputs.forEach(i => {
-                i.disabled = true;
-            });
-        }
-    });
+// Common
+export function GetUserByID(id) {
+    const userArray = listPerson.list.filter(p => p.id === id);
+    const [user] = userArray;
+    return user;
+}
 
-    return e ? e.target.closest('.nav-link').dataset.user : 'student';
+// UI: Render input options
+export function renderInputOptions(index) {
+    ActiveButton(index);
+    const element = $('#input-options');
+    let html = '';
+    switch (index) {
+        case 0:
+            html = `
+                <div class="row">
+                    <div class="col-4 form-group mb-2">
+                        <label for="math" class="form-label">Math</label>
+                        <input type="number" name="math" id="math" class="form-control" rules="required" aria-describedby="helpId" />
+                        <small class="form-message"></small>
+                    </div>
+                    <div class="col-4 form-group mb-2">
+                        <label for="physical" class="form-label">Physical</label>
+                        <input type="number" name="physical" id="physical" class="form-control" rules="required" aria-describedby="helpId" />
+                        <small class="form-message"></small>
+                    </div>
+                    <div class="col-4 form-group mb-2">
+                        <label for="chemistry" class="form-label">Chemistry</label>
+                        <input type="number" name="chemistry" id="chemistry" class="form-control" rules="required" aria-describedby="helpId" />
+                        <small class="form-message"></small>
+                    </div>
+
+                </div>`;
+            break;
+        case 1:
+            html = `
+                <div class='row'>
+                    <div class='col-6 form-group mb-2'>
+                        <label for='daysWorked' class='form-label'>
+                            Days of worked
+                        </label>
+                        <input type='number' name='daysWorked' id='daysWorked' class='form-control' rules='required' aria-describedby='helpId' />
+                        <small class='form-message'></small>
+                    </div>
+                    <div class='col-6 form-group mb-2'>
+                        <label for='salary' class='form-label'>
+                            Daily Salary (VND)
+                        </label>
+                        <input type='number' name='salary' id='salary' class='form-control' rules='required' aria-describedby='helpId' />
+                        <small class='form-message'></small>
+                    </div>
+                </div>`;
+            break;
+        case 2:
+            html = `
+                <div class="row">
+                    <div class="col-4 form-group mb-2">
+                        <label for="companyName" class="form-label">Company Name</label>
+                        <input type="text" name="companyName" id="companyName" class="form-control" rules="required" aria-describedby="helpId" />
+                        <small class="form-message"></small>
+                    </div>
+                    <div class="col-4 form-group mb-2">
+                        <label for="invoice" class="form-label">Invoice Value (VND)</label>
+                        <input type="number" name="invoice" id="invoice" class="form-control" rules="required" aria-describedby="helpId" />
+                        <small class="form-message"></small>
+                    </div>
+                    <div class="col-4 form-group mb-2">
+                        <label for="rating" class="form-label">Rating</label>
+                        <input type="text" name="rating" id="rating" class="form-control" rules="required" aria-describedby="helpId" />
+                        <small class="form-message"></small>
+                    </div>
+                </div>
+            `;
+            break;
+    }
+    element.innerHTML = html;
 }
 
 // UI: Render user list
@@ -64,10 +121,10 @@ export function RenderUserList(arr = listPerson.list) {
                     <th>${name}</th>
                     <th>${email}</th>
                     <th class="action-icon text-end">
-                        <button class="border-0 bg-transparent">
+                        <button data-view=${id} class="border-0 bg-transparent" data-bs-toggle="modal" data-bs-target="#addProductModal">
                             <i class="fa-regular fa-eye"></i>
                         </button>
-                        <button data-edit="${id}" class="border-0 bg-transparent">
+                        <button data-edit="${id}" class="border-0 bg-transparent" data-bs-toggle="modal" data-bs-target="#addProductModal">
                             <i class="fa-regular fa-pen-to-square"></i>
                         </button>
                         <button data-del="${id}" class="border-0 bg-transparent">
@@ -80,181 +137,178 @@ export function RenderUserList(arr = listPerson.list) {
     $('#userData').innerHTML = html.join('');
 }
 
-// UI: Set Default form
-function setDefaultForm() {
+// UI: Remove invalid
+function RemoveInvalid() {
+    const formValids = $$('.form-group.invalid');
+    if (formValids.length) {
+        formValids.forEach(f => {
+            f.classList.remove('invalid');
+            f.querySelector('.form-message').innerHTML = '';
+        });
+    }
+}
+
+// UI: Set default form
+export function SetDefaultForm() {
     $('#add-user').reset();
-    const navLinks = $$('.nav-tabs .nav-link');
-    const tabPanes = $$('.tab-content .tab-pane');
+    RemoveInvalid();
+    renderInputOptions(0);
 
-    const navLinkActive = $('.nav-tabs .nav-link.active');
-    navLinkActive.classList.remove('active');
-    navLinks[0].classList.add('active');
+    // Generate user ID
+    let id = 0;
+    do {
+        id = new Date().getTime().toString() % 1000000;
+    } while (Number(id) < 100000 && Number(id) > 999999);
 
-    const tabPaneActive = $('.tab-content .tab-pane.active.show');
-    tabPaneActive.classList.remove('show', 'active');
-    tabPanes[0].classList.add('show', 'active');
+    $('#id').value = id;
+    $('#modal-heading').innerHTML = 'Add User';
+    getFormBtn.style.display = 'inline-block';
+    getFormBtn.innerHTML = 'Add Now!';
+}
+
+// UI: Show information user
+export function ShowUserInfo(id) {
+    const user = GetUserByID(id);
+    const { name, email, address, userType, math, physical, chemistry, days, salary, nameCompany, billValue, rating } = user;
+    $('#modal-heading').innerHTML = 'User Information';
+    $('#id').value = id;
+    $('#name').value = name;
+    $('#email').value = email;
+    $('#address').value = address;
+
+    switch (userType) {
+        case 'Student':
+            renderInputOptions(0);
+
+            $('#math').value = math;
+            $('#physical').value = physical;
+            $('#chemistry').value = chemistry;
+            break;
+        case 'Employee':
+            renderInputOptions(1);
+
+            $('#daysWorked').value = days;
+            $('#salary').value = salary;
+            break;
+        case 'Customer':
+            renderInputOptions(2);
+
+            $('#companyName').value = nameCompany;
+            $('#invoice').value = billValue;
+            $('#rating').value = rating;
+            break;
+    }
+}
+
+// UI: Show infor mode
+export function ShowInfoMode(status) {
+    const inputs = $$('#add-user .form-control, #add-user .nav-link');
+    if (status) {
+        $('.nav-tabs').style.display = 'none';
+        $('#getFormBtn').style.display = 'none';
+        inputs.forEach(i => {
+            i.disabled = true;
+        });
+    } else {
+        $('.nav-tabs').style.display = 'flex';
+        $('#getFormBtn').style.display = 'inline-block';
+        inputs.forEach(i => {
+            i.disabled = false;
+        });
+    }
+
+    RemoveInvalid();
+}
+
+// UI: Active button type options
+export function ActiveButton(index) {
+    const button = $$('#add-user .nav-link');
+    $('#add-user .nav-link.active').classList.remove('active');
+    button[index].classList.add('active');
+}
+
+// UI: User Account
+export function FeatureAccount(curAcc, id) {
+    const fea = $('#feature');
+    const title = $('#feature .title');
+    const result = $('#feature .result');
+    const index = listPerson.list.findIndex(p => p.id === id);
+
+    const user = listPerson.list[index];
+
+    if (curAcc === 'stu' && user.userType === 'Student') {
+        fea.classList.add('active');
+        title.innerHTML = 'Average of subject: ';
+        result.innerHTML = user.calcPoints() + ' points';
+    } else if (curAcc === 'emp' && user.userType === 'Employee') {
+        fea.classList.add('active');
+        title.innerHTML = 'Salary of employee: ';
+        result.innerHTML = user.calcSalary() + ' VND';
+    } else {
+        fea.classList.remove('active');
+    }
 }
 
 // OOP: Add user
-export function HandleAddPerson(typeUser) {
-    const validator = new Validator('#add-user');
-    validator.onSubmit = function (data) {
-        let newUser = {};
-        switch (typeUser) {
-            case 'student':
-                newUser = new Student(data.id, data.name, data.address, data.email, 'Student', data.math, data.physical, data.chemistry);
-                break;
-            case 'employee':
-                newUser = new Employee(data.id, data.name, data.address, data.email, 'Employee', data.daysWorked, data.salary);
-                break;
-            case 'customer':
-                newUser = new Customer(data.id, data.name, data.address, data.email, 'Customer', data.companyName, data.invoice, data.rating);
-                break;
-        }
+export function HandleAddPerson(newUser) {
+    listPerson.AddUserMethod(newUser);
+    SetLocalStorages(listPerson.list);
 
-        listPerson.AddUserMethod(newUser);
-        SetLocalStorages(listPerson.list);
-        RenderUserList();
-
-        $('#closeAddPerson').click();
-        setDefaultForm();
-        showNotice('Added successful!');
-    };
+    RenderUserList();
+    showNotice('Added successful!');
+    $('#closeAddPerson').click();
 }
 
 // OOP: Delete user
 export function HandleDeleteUser(id) {
     listPerson.DeleteUserMethod(id);
-    RenderUserList();
+
     SetLocalStorages(listPerson.list);
+    RenderUserList();
     showNotice('Delete successful!', 'delete');
 }
 
-// // Get product and show modal
-// export async function getEditProduct(id) {
-//     const ProductList = await api.getProduct();
-//     const index = ProductList.findIndex(p => p.id === id);
+// OOP: Edit user
+export function HandleEditPerson(newUser, editID) {
+    listPerson.EditUserMethod(newUser, editID);
+    SetLocalStorages(listPerson.list);
 
-//     if (index !== -1) {
-//         $('#productName').value = ProductList[index].name;
-//         $('#productSize').value = ProductList[index].size;
-//         $('#productPrice').value = ProductList[index].price;
-//         $('#productDiscount').value = ProductList[index].discount;
-//         $('#productImg').value = ProductList[index].img;
-//         $('#productDesc').value = ProductList[index].desc;
-//         $('#productQty').value = ProductList[index].qty;
+    RenderUserList();
+    $('#closeAddPerson').click();
+}
 
-//         const discount = $('#productDiscount').value;
-//         const price = $('#productPrice').value;
-//         $('#productSalePrice').value = discount ? (price * ((100 - discount) / 100)).toFixed(2) : '';
-//     }
-// }
-
-// // Edit product và render product
-// export async function handleEditProduct(product, id, index) {
-//     await api.putProduct(product, id);
-
-//     setUIDashboard(index);
-//     showNotice('Edit successful!');
-// }
-
-// // Pagination
-// export function Paginate(arr) {
-//     const itemsPage = 10;
-//     const pageNum = Math.ceil(arr.length / 10);
-
-//     const paginate = Array.from({ length: pageNum }, (_, i) => {
-//         const index = i * itemsPage;
-//         return arr.slice(index, index + itemsPage);
-//     });
-//     return paginate;
-// }
-
-// // Render button
-// export function renderButton(dataPageList, active) {
-//     const pageButton = dataPageList.map((_, i) => {
-//         return `
-//             <li class="page-item">
-//                 <button data-index="${i}" class="page page-num ${i === parseInt(active) ? 'active' : null}">${i + 1}</button>
-//             </li>
-//         `;
-//     });
-
-//     const preBtn = `<li class="page-item">
-//                         <button data-index="pre" class="page page-control">
-//                             <i class="fa-solid fa-angle-left"></i>
-//                         </button>
-//                     </li>`;
-//     const nextBtn = `<li class="page-item">
-//                         <button data-index="next" class="page page-control">
-//                             <i class="fa-solid fa-angle-right"></i>
-//                         </button>
-//                     </li>`;
-//     pageButton.unshift(preBtn);
-//     pageButton.push(nextBtn);
-
-//     $('.content-footer').style.display = 'block';
-//     $('#dbPagination').innerHTML = pageButton.join('');
-// }
-
-// export async function setUIDashboard(index) {
-//     const data = await api.getProduct();
-//     data.reverse();
-//     const page = Paginate(data);
-//     RenderListProduct(page[index]);
-//     renderButton(page, index);
-// }
-
-// // sortAscending
-// export async function sortAscending() {
-//     const data = await api.getProduct();
-//     data.sort((a, b) => a.price - b.price);
-//     RenderListProduct(data);
-//     $('.content-footer').style.display = 'none';
-// }
+// sortAscending
+export function SortAscending() {
+    const list = listPerson.SortbyName('acc');
+    RenderUserList(list);
+}
 
 // // sortDescending
-// export async function sortDescending() {
-//     const data = await api.getProduct();
-//     data.sort((a, b) => b.price - a.price);
-//     RenderListProduct(data);
-//     $('.content-footer').style.display = 'none';
-// }
+export function SortDescending() {
+    const list = listPerson.SortbyName('des');
+    RenderUserList(list);
+}
 
-// // Reset form
-// export function resetForm() {
-//     const inputs = $('#addProductForm').querySelectorAll('.form-group.invalid');
-//     const message = $('#addProductForm').querySelectorAll('.form-group.invalid .form-message');
+// Seach by Name
+export function SearchByName() {
+    // Chuyển value về dạng: xóa khoảng trắng, chữ thường, không dấu.
+    const keyInput = $('#searchNameInput').value.trim().toLowerCase();
+    const inputName = keyInput.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
-//     $('#addProductForm').reset();
-//     for (let i = 0; i < inputs.length; i++) {
-//         inputs[i].classList.remove('invalid');
-//         message[i].innerHTML = '';
-//     }
-// }
+    const filteredData = listPerson.list.filter(p => {
+        const nameLowerCase = p.userType.toLowerCase();
+        const dataName = nameLowerCase.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
-// // Seach by Name
-// export async function searchByName() {
-//     // Chuyển value về dạng: xóa khoảng trắng, chữ thường, không dấu.
-//     const keyInput = $('#searchNameInput').value.trim().toLowerCase();
-//     const inputName = keyInput.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        return dataName.includes(inputName);
+    });
 
-//     const data = await api.getProduct();
-//     const filteredData = data.filter(p => {
-//         const nameLowerCase = p.name.toLowerCase();
-//         const dataName = nameLowerCase.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-
-//         return dataName.includes(inputName);
-//     });
-
-//     if (filteredData.length && keyInput.length) {
-//         RenderListProduct(filteredData);
-//         $('.content-footer').style.display = 'none';
-//     } else {
-//         showNotice('No results found!', 'no result');
-//         setUIDashboard(0);
-//     }
-// }
+    if (filteredData.length && keyInput.length) {
+        RenderUserList(filteredData);
+    } else {
+        RenderUserList([]);
+        showNotice('No results found!', 'no result');
+    }
+}
 
 // Show status notice
 export function showNotice(message, status = 'success') {

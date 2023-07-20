@@ -148,7 +148,7 @@
 
                     .drop-header {
                         margin: $m-1;
-                        padding: $pd-2 $pd-4;
+                        padding: $pd-1 $pd-4;
                         img {
                             width: 32px;
                             height: 32px;
@@ -516,6 +516,10 @@
                     .action-icon button {
                         color: $color-light;
                         margin-left: $m-1 - 2;
+                        transition: $transition;
+                        &:hover {
+                            color: $dash-primary-color;
+                        }
                         
                     }
                     .product-img {

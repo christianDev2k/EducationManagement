@@ -59,7 +59,7 @@ function Validator(formSelector) {
         },
         email(value) {
             const regex = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-            return regex.test(value) ? undefined : 'This field must have a ID!';
+            return regex.test(value) ? undefined : 'This field must have a email!';
         },
         min(min) {
             return function (value) {
@@ -129,13 +129,13 @@ function Validator(formSelector) {
 
     formElement.onsubmit = e => {
         e.preventDefault();
-
         // Lặp qua các input
         const inputs = formElement.querySelectorAll('[name][rules]:not([disabled])');
+
         let isValid = true;
-        // for (let input of inputs) {
-        //     !handleValidate({ target: input }) ? (isValid = false) : null;
-        // }
+        for (let input of inputs) {
+            !handleValidate({ target: input }) ? (isValid = false) : null;
+        }
 
         if (isValid) {
             if (typeof this.onSubmit === 'function') {
