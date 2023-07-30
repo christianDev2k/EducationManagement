@@ -1,14 +1,13 @@
 import Student from '../models/Student.js';
 import Employee from '../models/Employee.js';
 import Customer from '../models/Customer.js';
-import ListPerson from '../models/ListPerson.js';
+import listPerson from '../models/ListPerson.js';
 
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
 const KEY_STORAGE = 'userList';
 
-const listPerson = new ListPerson();
 
 // Local Storage: Set local
 function SetLocalStorages(value) {
@@ -121,11 +120,11 @@ export function RenderUserList(arr = listPerson.list) {
                     <th>${name}</th>
                     <th>${email}</th>
                     <th class="action-icon text-end">
-                        <button data-view=${id} class="border-0 bg-transparent" data-bs-toggle="modal" data-bs-target="#addProductModal">
-                            <i class="fa-regular fa-eye"></i>
+                        <button data-view=${id} class="border-0 bg-transparent" >
+                            <i class="fa-regular fa-eye" data-bs-toggle="modal" data-bs-target="#addProductModal"></i>
                         </button>
-                        <button data-edit="${id}" class="border-0 bg-transparent" data-bs-toggle="modal" data-bs-target="#addProductModal">
-                            <i class="fa-regular fa-pen-to-square"></i>
+                        <button data-edit="${id}" class="border-0 bg-transparent" >
+                            <i class="fa-regular fa-pen-to-square" data-bs-toggle="modal" data-bs-target="#addProductModal"></i>
                         </button>
                         <button data-del="${id}" class="border-0 bg-transparent">
                             <i class="fa-regular fa-trash-can"></i>
@@ -158,7 +157,7 @@ export function SetDefaultForm() {
     let id = 0;
     do {
         id = new Date().getTime().toString() % 1000000;
-    } while (Number(id) < 100000 && Number(id) > 999999);
+    } while (Number(id) < 100000 || Number(id) > 999999);
 
     $('#id').value = id;
     $('#modal-heading').innerHTML = 'Add User';

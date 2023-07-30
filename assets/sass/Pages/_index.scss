@@ -520,11 +520,22 @@
                         &:hover {
                             color: $dash-primary-color;
                         }
-                        
                     }
                     .product-img {
                         width: 70px;
                         height: 70px;
+                    }
+
+                    .type-filter-btn {
+                        @include Text($fs-1, $fw-3, $color-header);
+                        text-align: left;
+                        padding: 0;
+                        outline: none;
+                        border: 0;
+                    }
+
+                    .dropdown-item {
+                        @extend th;
                     }
                 }
                 .content-footer {

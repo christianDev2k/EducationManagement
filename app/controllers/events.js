@@ -2,6 +2,7 @@ import Validator from '../../app/util/validations.js';
 import Student from '../models/Student.js';
 import Employee from '../models/Employee.js';
 import Customer from '../models/Customer.js';
+import listPerson from '../models/ListPerson.js';
 import {
     FeatureAccount,
     SearchByName,
@@ -44,7 +45,13 @@ const event = () => {
     accounts.forEach(acc => {
         acc.onclick = () => {
             curAcc = acc.dataset.account;
-            const avatarText = curAcc ? (curAcc === 'stu' ? 'Student' : curAcc === 'emp' ? 'Employee' : 'Customer') : null;
+            const avatarText = curAcc
+                ? curAcc === 'stu'
+                    ? 'Student'
+                    : curAcc === 'emp'
+                    ? 'Employee'
+                    : 'Customer'
+                : null;
             $('#account-name').innerHTML = avatarText;
         };
     });
@@ -69,19 +76,20 @@ const event = () => {
     // OOP: Remove / Edit person
     $('#userData').onclick = e => {
         const button = e.target.parentElement;
+
         if (button.getAttribute('data-del')) {
             HandleDeleteUser(button.dataset.del);
-        } else if (button.getAttribute('data-view')) {
+        } 
+        else if (button.getAttribute('data-view')) {
             const id = button.dataset.view;
-
             ShowInfoMode(true);
             ShowUserInfo(id);
             FeatureAccount(curAcc, id);
-        } else if (button.getAttribute('data-edit')) {
+        } 
+        else if (button.getAttribute('data-edit')) {
             ShowInfoMode(false);
             editID = button.dataset.edit;
             ShowUserInfo(editID);
-
             getFormBtn.style.display = 'inline-block';
             $('#modal-heading').innerHTML = 'Edit Mode';
             $('#getFormBtn').innerHTML = 'Edit Now!';
@@ -107,12 +115,38 @@ const event = () => {
         SearchByName();
     };
 
+    // Filter type
+    $('#fil-student').onclick = () => {
+        listPerson.FilterByType('Student')
+    };
+
+    $('#fil-employee').onclick = () => {
+        listPerson.FilterByType('Employee')
+    };
+
+    $('#fil-customer').onclick = () => {
+        listPerson.FilterByType('Customer')
+    };
+
     // =================================================================
 
     function handleValidate(index) {
         const validator = new Validator('#add-user');
         validator.onSubmit = function (data) {
-            const { id, name, address, email, math, physical, chemistry, daysWorked, salary, companyName, invoice, rating } = data;
+            const {
+                id,
+                name,
+                address,
+                email,
+                math,
+                physical,
+                chemistry,
+                daysWorked,
+                salary,
+                companyName,
+                invoice,
+                rating,
+            } = data;
             let newUser = {};
 
             switch (index) {

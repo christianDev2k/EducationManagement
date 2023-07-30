@@ -1,3 +1,5 @@
+import { RenderUserList } from '../controllers/functions.js';
+
 class ListPerson {
     constructor() {
         this.list = [];
@@ -18,8 +20,17 @@ class ListPerson {
 
     SortbyName(options) {
         const [...sortArray] = this.list;
-        return options === 'acc' ? sortArray.sort((a, b) => a.name.localeCompare(b.name)) : sortArray.sort((a, b) => b.name.localeCompare(a.name));
+        return options === 'acc'
+            ? sortArray.sort((a, b) => a.name.localeCompare(b.name))
+            : sortArray.sort((a, b) => b.name.localeCompare(a.name));
+    }
+
+    FilterByType(type) {
+        const users = this.list.filter(u => u.userType === type);
+        RenderUserList(users);
     }
 }
 
-export default ListPerson;
+const listPerson = new ListPerson();
+
+export default listPerson;

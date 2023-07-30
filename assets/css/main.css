@@ -712,22 +712,22 @@
 .main-content .data-list .content-body .table-body .product-list .col-20per {
   width: 15%;
 }
-.main-content .data-list .content-body .table-body .product-list .table-title th {
+.main-content .data-list .content-body .table-body .product-list .table-title th, .main-content .data-list .content-body .table-body .product-list .table-title .dropdown-item {
   padding: 13px 20px;
   background-color: #f8f9fb;
   color: #404040;
   font-size: 14px;
   font-weight: 500;
 }
-.main-content .data-list .content-body .table-body .product-list .table-title th:first-child {
+.main-content .data-list .content-body .table-body .product-list .table-title th:first-child, .main-content .data-list .content-body .table-body .product-list .table-title .dropdown-item:first-child {
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
 }
-.main-content .data-list .content-body .table-body .product-list .table-title th:last-child {
+.main-content .data-list .content-body .table-body .product-list .table-title th:last-child, .main-content .data-list .content-body .table-body .product-list .table-title .dropdown-item:last-child {
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
 }
-.main-content .data-list .content-body .table-body .product-list th {
+.main-content .data-list .content-body .table-body .product-list th, .main-content .data-list .content-body .table-body .product-list .dropdown-item {
   padding: 10px 20px;
   color: #111;
   font-size: 14px;
@@ -744,6 +744,15 @@
 .main-content .data-list .content-body .table-body .product-list .product-img {
   width: 70px;
   height: 70px;
+}
+.main-content .data-list .content-body .table-body .product-list .type-filter-btn {
+  color: #111;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  padding: 0;
+  outline: none;
+  border: 0;
 }
 .main-content .data-list .content-body .table-body .content-footer {
   padding-top: 20px;
