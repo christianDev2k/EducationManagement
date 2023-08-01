@@ -295,7 +295,7 @@ export function SearchByName() {
     const inputName = keyInput.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
     const filteredData = listPerson.list.filter(p => {
-        const nameLowerCase = p.userType.toLowerCase();
+        const nameLowerCase = p.name.toLowerCase();
         const dataName = nameLowerCase.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
         return dataName.includes(inputName);
